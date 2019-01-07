@@ -4,6 +4,7 @@ services:
   database:
     image: mysql:5.7
     environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
       MYSQL_USER: 'gsenha'
       MYSQL_PASSWORD: ${MYSQL_PASS:?'Set MySQL pass'}
       MYSQL_DB: 'gsenha'
@@ -28,4 +29,4 @@ services:
       MYSQL_USERNAME: 'gsenha'
       MYSQL_PASSWORD: ${MYSQL_PASS:?'Set MySQL pass'}
       MYSQL_DBNAME: 'gsenha'
-
+    restart: unless-stopped
