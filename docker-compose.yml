@@ -1,0 +1,32 @@
+version: '2.3'
+
+services:
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_USER: 'gsenha'
+      MYSQL_PASSWORD: ${MYSQL_PASS:?'Set MySQL pass'}
+      MYSQL_DB: 'gsenha'
+  directory:
+    image: osixia/openldap:1.2.2
+    environment:
+      LDAP_ADMIN_PASSWORD: ${LDAP_PASS:?'Set LDAP pass'}
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - 8888:8888
+    links:
+      - database:database
+      - directory:directory
+    depends_on:
+      - database
+      - directory
+    environment:
+      MYSQL_HOST: database
+      MYSQL_USERNAME: 'gsenha'
+      MYSQL_PASSWORD: ${MYSQL_PASS:?'Set MySQL pass'}
+      MYSQL_DBNAME: 'gsenha'
+    restart: unless-stopped
